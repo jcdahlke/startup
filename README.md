@@ -16,3 +16,11 @@ Did you know that there are over 16 million different color combinations using j
 * Auto Reset of current score when getting a guess wrong
 * Ability to select and submit one color
 * Increment score if color selected matches above RGB Value
+
+## Technologies
+* HTML - 3 HTML pages. One for login. One for the game. One for leaderboard. Good HTML structure.
+* CSS - Mkaing sure the color scheme and contrast is good. Aslo to make sure the application can fit on different screen sizes.
+* REACT -
+* Service -
+* DB/Login -
+* WebSocket - 
