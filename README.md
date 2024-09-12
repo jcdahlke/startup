@@ -19,8 +19,9 @@ Did you know that there are over 16 million different color combinations using j
 
 ## Technologies
 * HTML - 3 HTML pages. One for login. One for the game. One for leaderboard. Good HTML structure.
-* CSS - Mkaing sure the color scheme and contrast is good. Aslo to make sure the application can fit on different screen sizes.
-* REACT -
+* CSS - Making sure the color scheme and contrast is good. Aslo to make sure the application can fit on different screen sizes.
+* JavaScript - Adding functions to buttons, and randomizing different color values. It also provides login
+* React -
 * Service -
-* DB/Login -
+* DB/Login - This will store and display player highscores. Displays User name when logged in.
 * WebSocket - 
