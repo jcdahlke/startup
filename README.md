@@ -24,4 +24,4 @@ Did you know that there are over 16 million different color combinations using j
 * React -
 * Service -
 * DB/Login - This will store and display player highscores. Displays User name when logged in.
-* WebSocket - 
+* WebSocket - This will show the leaserboards of other player's scores.
