@@ -24,7 +24,7 @@ Core to both Single Page Applications (SPAs) and Multi-Page Applications (MPAs).
 ### Basic Example:
 Simple HTML document structure:
 html
-'<p>Hello world</p>'
+'&lt;p>Hello world</p>'
 
 ### Elements & Tags:
 Tags are enclosed with < > and define content structure, e.g.,
