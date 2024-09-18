@@ -24,16 +24,16 @@ Core to both Single Page Applications (SPAs) and Multi-Page Applications (MPAs).
 ### Basic Example:
 Simple HTML document structure:
 html
-'&lt;p>Hello world</p>'
+'&lt;p>Hello world&lt;/p>'
 
 ### Elements & Tags:
-Tags are enclosed with < > and define content structure, e.g.,
-'<p>text</p>' for paragraphs.
+Tags are enclosed with &lt; > and define content structure, e.g.,
+'&lt;p>text&lt;/p>' for paragraphs.
 ### Attributes:
-Elements can have attributes like id and class, e.g.,'<p id="greet" class="welcome">'.
+Elements can have attributes like id and class, e.g.,'&lt;p id="greet" class="welcome">'.
 
 ### Hyperlinks:
 Links are created with the
-'<a> tag, e.g., <a href="url">link text</a>'.
+'&lt;a> tag, e.g., &lt;a href="url">link text&lt;/a>'.
 ### Common HTML Elements:
 html, head, body, p, h1-h9, a, div, img, form.
