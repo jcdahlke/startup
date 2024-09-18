@@ -13,3 +13,23 @@ Size: t2.micro
 Server Region: US East (N. Virginia) - us-east-1
 Name: jcdahlke-CS260WebServer-1.0
 Elastic IP allows me to keep the same public IP Address
+
+## Domain
+➜  rgbcolorguesser.click
+
+## HTML
+### HTML Overview:
+HTML structures web content and is foundational for web development.
+Core to both Single Page Applications (SPAs) and Multi-Page Applications (MPAs).
+### Basic Example:
+Simple HTML document structure:
+html
+<p>Hello world</p>
+### Elements & Tags:
+Tags are enclosed with < > and define content structure, e.g., <p>text</p> for paragraphs.
+### Attributes:
+Elements can have attributes like id and class, e.g., <p id="greet" class="welcome">.
+### Hyperlinks:
+Links are created with the <a> tag, e.g., <a href="url">link text</a>.
+### Common HTML Elements:
+html, head, body, p, h1-h9, a, div, img, form.
