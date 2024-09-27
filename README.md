@@ -18,7 +18,7 @@ Did you know that there are over 16 million different color combinations using j
 * Increment score if color selected matches above RGB Value
 
 ## Technologies
-* HTML - 3 HTML pages. One for login. One for the game. One for leaderboard. Good HTML structure.
+* HTML - 4 HTML pages. One for login. One for the game. One for leaderboard. Good HTML structure.
 * CSS - Making sure the color scheme and contrast is good. Aslo to make sure the application can fit on different screen sizes.
 * JavaScript - Adding functions to buttons, and randomizing different color values. It also provides login
 * React - This handles login and routing
@@ -28,3 +28,13 @@ Did you know that there are over 16 million different color combinations using j
   * login
 * DB/Login - This will store and display player highscores. Displays User name when logged in.
 * WebSocket - This will show the leaserboards of other player's scores.
+
+# Deliverables
+## HTML Deliverable
+I built the sturcture to my website using HTML
+* **HTML Pages** - Four HTML pages representing login, play, high Scores, and about
+* **Links** - Each page links to all the other pages
+* **Text** - The about section explains how to play the game
+* **Images** - Included image in home and image for web icon
+* **Login** - Input box and submit button for login. Option for guest.
+* **WebSocket** - Display table for Global High scores.
