@@ -37,3 +37,9 @@ Links are created with the
 '&lt;a> tag, e.g., &lt;a href="url">link text&lt;/a>'.
 ### Common HTML Elements:
 html, head, body, p, h1-h9, a, div, img, form.
+
+## HTML Startup
+* index.html is for the homepage
+* I have 4 HTML pages
+* I can use a table of div to display place holders for different colors
+* I can change the color of letters using the following span style="color: red;">Input here&lt;/span>
