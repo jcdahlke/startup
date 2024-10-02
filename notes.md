@@ -95,3 +95,25 @@ Copy code
         display: none;
     }
 }
+
+## CSS Frameworks
+CSS Frameworks provide common components for web development, speeding up projects and ensuring consistency.
+Examples include Tailwind CSS and Bootstrap, both popular for different reasons.
+Tailwind CSS: Uses utility classes for individual elements, shifting much of the CSS into HTML, offering flexibility and customization.
+Example:
+html
+&lt;div class="pt-6 md:p-8 text-center">
+  &lt;p class="text-lg">Tailwind CSS&lt;/p>
+&lt;/div>
+Bootstrap: A well-established framework, provides rich components but may result in sites looking similar.
+Bootstrap can be easily included via a CDN link:
+html
+&lt;link href="https://cdn.jsdelivr.net/.../bootstrap.min.css" rel="stylesheet" />
+To add Bootstrap's JavaScript components, include the JS bundle at the end of the HTML body.
+html
+Copy code
+&lt;script src="https://cdn.jsdelivr.net/.../bootstrap.bundle.min.js">&lt;/script>
+Bootstrap offers easy-to-use components like buttons:
+html
+&lt;button class="btn btn-primary">Bootstrap&lt;/button>
+Future integration via NPM is possible with npm install bootstrap.
