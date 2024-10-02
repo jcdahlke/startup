@@ -52,7 +52,7 @@ Example layout includes a header, footer, and a main content area that is split 
 The body is turned into a flex container by applying display: flex and setting flex-direction: column to stack the header, main, and footer vertically.
 Other properties like margin: 0 and height: 100vh are used to ensure the body fills the entire viewport.
 css
-Copy code
+
 body {
     display: flex;
     flex-direction: column;
@@ -63,57 +63,57 @@ body {
 Header and Footer: flex: 0 80px for the header and flex: 0 30px for the footer create fixed-height boxes that do not grow.
 Main: flex: 1 makes the main content fill the remaining space. It is also a flex container with display: flex and flex-direction: row to lay out its children (controls and content) side by side.
 css
-Copy code
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
+  
+main {  
+    flex: 1;  
+    display: flex;  
+    flex-direction: row;  
 }
 ### Dividing Space Between Controls and Content
 The two sections inside main are split using flex: 1 for controls (25% space) and flex: 3 for content (75% space). This creates a responsive ratio that adjusts with the window size.
 css
-Copy code
-section:nth-child(1) {
-    flex: 1;
-}
-section:nth-child(2) {
-    flex: 3;
-}
+  
+section:nth-child(1) {  
+    flex: 1;  
+}  
+section:nth-child(2) {  
+    flex: 3;  
+}  
 ### Media Queries for Small Screens
 Portrait Mode: When in portrait orientation, flex-direction of the main element changes to column so that controls and content stack vertically.
 Short Screens: If the viewport height is less than 700px, both the header and footer are hidden to allow the main section to take up all available space.
 css
-Copy code
-@media (orientation: portrait) {
-    main {
-        flex-direction: column;
-    }
-}
 
-@media (max-height: 700px) {
-    header, footer {
-        display: none;
-    }
-}
+@media (orientation: portrait) {  
+    main {  
+        flex-direction: column;  
+    }  
+}  
 
+@media (max-height: 700px) {  
+    header, footer {  
+        display: none;  
+    }  
+}  
+  
 ## CSS Frameworks
-CSS Frameworks provide common components for web development, speeding up projects and ensuring consistency.
-Examples include Tailwind CSS and Bootstrap, both popular for different reasons.
-Tailwind CSS: Uses utility classes for individual elements, shifting much of the CSS into HTML, offering flexibility and customization.
-Example:
-html
-&lt;div class="pt-6 md:p-8 text-center">
-  &lt;p class="text-lg">Tailwind CSS&lt;/p>
-&lt;/div>
-Bootstrap: A well-established framework, provides rich components but may result in sites looking similar.
-Bootstrap can be easily included via a CDN link:
-html
-&lt;link href="https://cdn.jsdelivr.net/.../bootstrap.min.css" rel="stylesheet" />
-To add Bootstrap's JavaScript components, include the JS bundle at the end of the HTML body.
-html
-Copy code
-&lt;script src="https://cdn.jsdelivr.net/.../bootstrap.bundle.min.js">&lt;/script>
-Bootstrap offers easy-to-use components like buttons:
-html
-&lt;button class="btn btn-primary">Bootstrap&lt;/button>
-Future integration via NPM is possible with npm install bootstrap.
+CSS Frameworks provide common components for web development, speeding up projects and ensuring consistency.  
+Examples include Tailwind CSS and Bootstrap, both popular for different reasons.  
+Tailwind CSS: Uses utility classes for individual elements, shifting much of the CSS into HTML, offering flexibility and customization.  
+Example:  
+html  
+&lt;div class="pt-6 md:p-8 text-center">  
+  &lt;p class="text-lg">Tailwind CSS&lt;/p>  
+&lt;/div>  
+Bootstrap: A well-established framework, provides rich components but may result in sites looking similar.  
+Bootstrap can be easily included via a CDN link:  
+html  
+&lt;link href="https://cdn.jsdelivr.net/.../bootstrap.min.css" rel="stylesheet" />  
+To add Bootstrap's JavaScript components, include the JS bundle at the end of the HTML body.  
+html  
+Copy code  
+&lt;script src="https://cdn.jsdelivr.net/.../bootstrap.bundle.min.js">&lt;/script>  
+Bootstrap offers easy-to-use components like buttons:  
+html  
+&lt;button class="btn btn-primary">Bootstrap&lt;/button>  
+Future integration via NPM is possible with npm install bootstrap.  
