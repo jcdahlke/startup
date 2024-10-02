@@ -43,3 +43,55 @@ html, head, body, p, h1-h9, a, div, img, form.
 * I have 4 HTML pages
 * I can use a table of div to display place holders for different colors
 * I can change the color of letters using the following span style="color: red;">Input here&lt;/span>
+
+## CSS Flex
+### Flexbox Layout for Responsive Design
+Flexbox is ideal for creating responsive layouts where elements move around based on window resizing or orientation changes.
+Example layout includes a header, footer, and a main content area that is split into two sections (controls on the left, content on the right).
+### Setting up Flexbox on the Body
+The body is turned into a flex container by applying display: flex and setting flex-direction: column to stack the header, main, and footer vertically.
+Other properties like margin: 0 and height: 100vh are used to ensure the body fills the entire viewport.
+css
+Copy code
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    height: 100vh;
+}
+### Flexbox Properties for Header, Footer, and Main
+Header and Footer: flex: 0 80px for the header and flex: 0 30px for the footer create fixed-height boxes that do not grow.
+Main: flex: 1 makes the main content fill the remaining space. It is also a flex container with display: flex and flex-direction: row to lay out its children (controls and content) side by side.
+css
+Copy code
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+### Dividing Space Between Controls and Content
+The two sections inside main are split using flex: 1 for controls (25% space) and flex: 3 for content (75% space). This creates a responsive ratio that adjusts with the window size.
+css
+Copy code
+section:nth-child(1) {
+    flex: 1;
+}
+section:nth-child(2) {
+    flex: 3;
+}
+### Media Queries for Small Screens
+Portrait Mode: When in portrait orientation, flex-direction of the main element changes to column so that controls and content stack vertically.
+Short Screens: If the viewport height is less than 700px, both the header and footer are hidden to allow the main section to take up all available space.
+css
+Copy code
+@media (orientation: portrait) {
+    main {
+        flex-direction: column;
+    }
+}
+
+@media (max-height: 700px) {
+    header, footer {
+        display: none;
+    }
+}
