@@ -2,6 +2,22 @@ body{
     display: flex;
     flex-direction: column;
     min-width: 375px;
+    background:
+      rgba(0, 0, 0, 0.5);
+}
+
+.index_body {
+    background:
+      rgba(0, 0, 0, 0.5);
+    background-size: cover;
+            /* Center the background image */
+    background-position: center;
+            /* Prevent tiling */
+    background-repeat: no-repeat;
+            /* Set height to cover full viewport */
+    height: 100vh;
+            /* Optional: set margin to 0 */
+     margin: 0;
 }
 
 header {
@@ -51,4 +67,6 @@ main {
       flex: 1 100vh;
     }
   }
+
+  
   
