@@ -1,5 +1,11 @@
+.play-header {
+    background-color: slategray;
+}
+
 .play-body {
-    background-color: rgba(112, 128, 144,1);
+    /* background-color: rgba(112, 128, 144,1); */
+    background: radial-gradient(circle, crimson, slategray);
+    ;
 }
 
 .color-box {

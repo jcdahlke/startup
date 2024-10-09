@@ -21,6 +21,7 @@ body{
 
 header {
     flex: 0 80px;
+    background-color: slategray;
 }
 
 main {
@@ -32,6 +33,7 @@ main {
   }
   footer {
     flex: 0 30px;
+    background-color: slategray;
   }
   
   menu {
@@ -53,6 +55,7 @@ main {
   
   footer a {
     float: right;
+    
   }
   
   @media (max-height: 600px) {
