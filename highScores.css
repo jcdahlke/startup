@@ -1,3 +1,5 @@
 .highScores-body {
     background: radial-gradient(ellipse, green,slategray);
+
+    height: 100vh;
 }

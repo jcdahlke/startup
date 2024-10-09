@@ -6,6 +6,8 @@
     /* background-color: rgba(112, 128, 144,1); */
     background: radial-gradient(ellipse, crimson, slategray);
 
+    height: 100vh;
+
 }
 
 .play-div {
