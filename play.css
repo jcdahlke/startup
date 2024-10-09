@@ -1,3 +1,14 @@
 .play-body {
     background-color: rgba(112, 128, 144,1);
 }
+
+.color-box {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    border: 2px solid black;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+}

@@ -29,24 +29,59 @@
             Player: Username here
         </div>
         <div>
-            High Score: 26
+            High Score: 25
         </div>
         <div>
             Current Score: 0
         </div>
-        <table>
-            <tr>
-                <td><div style="width: 100px; height: 100px; text-align: center; border: 2px solid black; background-color:aqua;"> Color 1</div></td>
-                <td><div style="width: 100px; height: 100px; text-align: center; border: 2px solid black; background-color:coral;"> Color 2</div></td>
-                <td><div style="width: 100px; height: 100px; text-align: center; border: 2px solid black; background-color:darkgreen">Color 3</div></td>
-            </tr>
-            <tr>
-                <td><div style="width: 100px; height: 100px; text-align: center; border: 2px solid black; background-color:;"> Color 4</div></td>
-                <td><div style="width: 100px; height: 100px; text-align: center; border: 2px solid black; background-color:rgb(186, 38, 206);">Color 5</div></td>
-                <td><div style="width: 100px; height: 100px; text-align: center; border: 2px solid black; background-color:pink;">Color 6</div></td>
-            </tr>
-        </table>
-        <button type="submit" class="btn btn-primary">submit</button>
+        <form id="colorForm" onsubmit="handleSubmit(event)">
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="radio" name="color" value="Color 1">
+                            <div class="color-box" style="background-color:aqua;">Color 1</div>
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input type="radio" name="color" value="Color 2">
+                            <div class="color-box" style="background-color:coral;">Color 2</div>
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input type="radio" name="color" value="Color 3">
+                            <div class="color-box" style="background-color:darkgreen;">Color 3</div>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="radio" name="color" value="Color 4">
+                            <div class="color-box" style="background-color:crimson;">Color 4</div>
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input type="radio" name="color" value="Color 5">
+                            <div class="color-box" style="background-color:rgb(186, 38, 206);">Color 5</div>
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input type="radio" name="color" value="Color 6">
+                            <div class="color-box" style="background-color:pink;">Color 6</div>
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <div style="text-align:center;">
+                <button type="submit" class = "btn btn-primary">Submit</button>
+            </div>
+        </form>
+       
     </main>
     <footer>
         <hr />
