@@ -4,8 +4,12 @@
 
 .play-body {
     /* background-color: rgba(112, 128, 144,1); */
-    background: radial-gradient(circle, crimson, slategray);
-    ;
+    background: radial-gradient(ellipse, crimson, slategray);
+
+}
+
+.play-div {
+    display: inline-block;
 }
 
 .color-box {

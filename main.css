@@ -7,7 +7,7 @@ body{
 
 .index_body {
     background:
-      rgba(0, 0, 0, 0.5);
+        radial-gradient(ellipse, rgb(55, 79, 155), slategray);
     background-size: cover;
             /* Center the background image */
     background-position: center;
