@@ -8,12 +8,12 @@
     border: 1px solid black;
     text-align: center;
     font-weight: bold;
-    background: rgba(85,75,85,0.6);
+    background: rgba(171, 164, 171, 0.6);
 }
 .col {
     border: 1px solid black;
     padding: 10px;
     text-align: center;
-    background: rgba(85,75,85,0.6);
+    background: rgba(171,171,171,0.6);
        
 }
