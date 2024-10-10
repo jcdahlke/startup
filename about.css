@@ -3,3 +3,9 @@
 
     height: 100vh;
 }
+
+.rgb-color-wheel img{
+    border-radius: 30%;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.6);
+    /* mix-blend-mode:multiply; */
+}
