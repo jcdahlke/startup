@@ -15,20 +15,7 @@
     ;
 }
 
-.red-underline {
-    text-decoration: underline; /* Underlines the text */
-    text-decoration-color: red; /* Sets the underline color to green */
-}
 
-.green-underline {
-    text-decoration: underline; /* Underlines the text */
-    text-decoration-color: green; /* Sets the underline color to green */
-}
-
-.blue-underline {
-    text-decoration: underline; /* Underlines the text */
-    text-decoration-color: blue; /* Sets the underline color to green */
-}
 
 .color-box {
     width: 100px;
