@@ -24,18 +24,19 @@ export default function App() {
 
       <nav>
         <menu className="navbar-nav">
-          <li className="nav-item"><NavLink className = "nav-link" to="play">Play</NavLink></li>
-          <li className="nav-item"><NavLink className = "nav-link" to="highScores">High Scores</NavLink></li>
-          <li className="nav-item"><NavLink className = "nav-link" to="about">About</NavLink></li>
+          <li className="nav-item"><NavLink className = "nav-link" to="/" end>Login</NavLink></li>
+          <li className="nav-item"><NavLink className = "nav-link" to="/play">Play</NavLink></li>
+          <li className="nav-item"><NavLink className = "nav-link" to="/highScores">High Scores</NavLink></li>
+          <li className="nav-item"><NavLink className = "nav-link" to="/about">About</NavLink></li>
         </menu>
       </nav>
       <hr />
     </header>
     
         <Routes>
-            <Route path="/" element={<Login />} exact />
+            <Route path="/" element={<Login />} />
             <Route path="/play" element={<Play />} />
-            <Route path="/scores" element={<HighScores />} />
+            <Route path="/highScores" element={<HighScores />} />
             <Route path="/about" element={<About />} />
             <Route path="/*" element={<NotFound />} />
         </Routes>
