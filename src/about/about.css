@@ -9,3 +9,10 @@
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.6);
     /* mix-blend-mode:multiply; */
 }
+
+.collapse {
+    color: lightgray;
+}
+.card-body {
+    background-color:rgb(94, 108, 121); /* Replace with your desired color */
+}
