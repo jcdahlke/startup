@@ -47,12 +47,12 @@ h1 {
 
 .green-underline {
     text-decoration: underline; /* Underlines the text */
-    text-decoration-color: green; /* Sets the underline color to green */
+    text-decoration-color: #32CD32; /* Sets the underline color to green */
 }
 
 .blue-underline {
     text-decoration: underline; /* Underlines the text */
-    text-decoration-color: blue; /* Sets the underline color to green */
+    text-decoration-color: #75caff; /* Sets the underline color to green */
 }
     
 
