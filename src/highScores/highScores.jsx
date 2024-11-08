@@ -1,4 +1,5 @@
 import React from "react";
+import './highScores.css'
 
 export function HighScores() {
     return (

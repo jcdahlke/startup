@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './play.css'
 
 export function Play() {
     const [score, setScore] = useState(0);
