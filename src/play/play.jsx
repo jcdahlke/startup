@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-import './play.css'
+import './play.css';
+import { useLocation } from "react-router-dom";
 
 export function Play() {
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(0);
-    const [username, setUsername] = useState("Username here");
     const [colorStyles, setColorStyles] = useState([]);
     const [correctColor, setCorrectColor] = useState('');
+    const location = useLocation();
+
+    // Use useState to initialize username only once
+    const [username] = useState(() => {
+        return location.state?.username || `Guest_${Math.floor(Math.random() * 99999)}`;
+    });
 
     // Function to generate a random RGB color
     function getRandomRGB() {
@@ -16,7 +22,7 @@ export function Play() {
         return `rgb(${r}, ${g}, ${b})`;
     }
 
-    // Function to randomize color styles and set correct color
+    // Function to randomize color styles and set the correct color
     function randomizeColors() {
         const colors = [
             getRandomRGB(),
@@ -29,7 +35,6 @@ export function Play() {
 
         const randomIndex = Math.floor(Math.random() * 6);
         setCorrectColor(colors[randomIndex]);
-
         setColorStyles(colors.map(color => ({ backgroundColor: color })));
     }
 
@@ -40,17 +45,13 @@ export function Play() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        // Get the selected color
         const selectedColor = event.target.color.value;
         const selectedColorRGB = colorStyles[parseInt(selectedColor.split(" ")[1]) - 1].backgroundColor;
 
-        // Check if the selected color matches the correct color
         if (selectedColorRGB === correctColor) {
             const newScore = score + 1;
             setScore(newScore);
 
-            // Check if the new score is higher than the high score and update it
             if (newScore > highScore) {
                 setHighScore(newScore);
             }
@@ -58,7 +59,6 @@ export function Play() {
             setScore(0); // Reset score if incorrect
         }
 
-        // After form submission, randomize the colors again
         randomizeColors();
     };
 

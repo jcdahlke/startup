@@ -13,7 +13,7 @@ export function Login() {
             return;
         }
         // Logic for login goes here
-        navigate("/play");
+        navigate("/play", { state: { username } });
     };
 
     const handleCreateAccount = () => {
@@ -21,7 +21,7 @@ export function Login() {
             alert("Please fill in both the username and password fields.");
             return;
         }
-        navigate("/play");
+        navigate("/play", { state: { username } });
     };
 
     const handleGuestLogin = () => {
