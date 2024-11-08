@@ -1,22 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function Login() {
     const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleLogin = () => {
+        // Check if username and password are not empty
+        if (username.trim() === "" || password.trim() === "") {
+            alert("Please fill in both the username and password fields.");
+            return;
+        }
         // Logic for login goes here
         navigate("/play");
     };
 
     const handleCreateAccount = () => {
-        // Logic for account creation
-        console.log("Create account clicked");
+        if (username.trim() === "" || password.trim() === "") {
+            alert("Please fill in both the username and password fields.");
+            return;
+        }
         navigate("/play");
     };
 
     const handleGuestLogin = () => {
-        // Logic for guest access
         console.log("Guest login clicked");
         navigate("/play");
     };
@@ -30,12 +38,22 @@ export function Login() {
             </h1>
             <form>
                 <div>
-                    <span>@</span>
-                    <input type="text" placeholder="your@email.com" />
+                    <span>👤</span>
+                    <input
+                        type="text"
+                        placeholder="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
                 </div>
                 <div>
                     <span>🔒</span>
-                    <input type="password" placeholder="password" />
+                    <input
+                        type="password"
+                        placeholder="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </div>
                 <button type="button" className="btn btn-primary" onClick={handleLogin}>
                     Login
