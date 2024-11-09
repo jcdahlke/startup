@@ -16,3 +16,10 @@
 .card-body {
     background-color:rgb(94, 108, 121); /* Replace with your desired color */
 }
+
+.parent-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    height: 100%;            /* Full height of the parent */
+}

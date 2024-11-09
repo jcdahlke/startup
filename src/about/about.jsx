@@ -70,19 +70,22 @@ export function About() {
                 <div className="card card-body">
                     <p>
                         You will be presented with a random <span style={{ color: 'red' }}>R</span><span style={{ color: '#32CD32' }}>G</span><span style={{ color: 'blue' }}>B</span> color value (e.g., (<span style={{ color: 'red' }}>213</span>, <span style={{ color: '#32CD32' }}>198</span>, <span style={{ color: 'blue' }}>2</span>)). Your task is to determine the color that matches this value.</p>
-                        <div 
-                            style={{
-                                width: '60px', 
-                                height: '60px', 
-                                textAlign: 'center', 
-                                border: '2px solid black', 
-                                backgroundColor: 'rgb(213, 198, 2)', 
-                                color: 'black', 
-                                fontSize: 'small'
-                            }}
-                        >
-                            example
+                        <div className="parent-container">
+                            <div
+                                style={{
+                                    width: '60px',
+                                    height: '60px',
+                                    textAlign: 'center',
+                                    border: '2px solid black',
+                                    backgroundColor: 'rgb(213, 198, 2)',
+                                    color: 'black',
+                                    fontSize: 'small'
+                                }}
+                            >
+                                Example
+                            </div>
                         </div>
+
                     <p>
                         <br /> Choose from 6 color displays—5 randomly generated and one that matches the given value. Select the correct one, submit your<br /> answer, and earn points if correct. Incorrect guesses reset your score. Play with friends and family to see who knows their colors best!
                     </p>
