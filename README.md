@@ -52,7 +52,7 @@ For this deliverable I properly styled the application into its final appearance
 The application now works for a single user minus persistant storage.
 * **Bundled and Transpiled** - This was done using Vite
 * **Components** - I added functionality to color game, and mocked login and set up for websocket
-* * **Login** - Cannot be left empty, and added guest feature functionality
+  * **Login** - Cannot be left empty, and added guest feature functionality
   * **database** - Created temporary instances of variables that will eventually be stored in the database.
   * **websocket** - mocked it so when it is added it can be easily included.
   * **aplication logic** - Made game functional with random color changes and scoring system
