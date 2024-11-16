@@ -1,37 +1,42 @@
 import React, { useState, useEffect } from "react";
 import './play.css';
-import { useLocation } from "react-router-dom";
 
 export function Play() {
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(0);
     const [colorStyles, setColorStyles] = useState([]);
     const [correctColor, setCorrectColor] = useState('');
-    const location = useLocation();
-
-    // Use useState to initialize username only once
-    const [username] = useState(() => {
-        return location.state?.username || `Guest_${Math.floor(Math.random() * 99999)}`;
-    });
-
+    const [username, setUsername] = useState(null); // Initially null until fetched
     const [token, setToken] = useState(null);
 
     useEffect(() => {
-        // Fetch user's high score when the component mounts
-        async function fetchHighScore() {
-            try {
-                const response = await fetch(`/api/scores?username=${username}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setHighScore(data.highScore || 0);
-                }
-            } catch (error) {
-                console.error("Error fetching high score:", error);
-            }
+        // Fetch username from localStorage directly
+        const storedUsername = localStorage.getItem("userName");
+        if (storedUsername) {
+            setUsername(storedUsername);
+        } else {
+            setUsername("Guest"); // Fallback to "Guest" if no username is found
         }
-
-        fetchHighScore();
         randomizeColors();
+    }, []);
+
+    useEffect(() => {
+        if (username) {
+            // Fetch user's high score when username is set
+            async function fetchHighScore() {
+                try {
+                    const response = await fetch(`/api/scores?username=${username}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setHighScore(data.highScore || 0);
+                    }
+                } catch (error) {
+                    console.error("Error fetching high score:", error);
+                }
+            }
+
+            fetchHighScore();
+        }
     }, [username]);
 
     // Function to generate a random RGB color
@@ -90,6 +95,10 @@ export function Play() {
 
         randomizeColors();
     };
+
+    if (!username) {
+        return <p>Loading...</p>; // Wait until the username is fetched from localStorage
+    }
 
     return (
         <main>

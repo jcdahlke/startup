@@ -45,6 +45,25 @@ apiRouter.post('/auth/login', async (req, res) => {
   res.status(401).send({ msg: 'Unauthorized' });
 });
 
+// GetAuth username (new endpoint to get the current user's username)
+apiRouter.get('/auth/username', (req, res) => {
+    // Get the token from the request header
+    const token = req.headers.authorization?.split(' ')[1]; // Assuming the token is passed as Bearer <token>
+    
+    if (!token) {
+      return res.status(401).send({ msg: 'Unauthorized' });
+    }
+  
+    // Find the user with the matching token
+    const user = Object.values(users).find((u) => u.token === token);
+  
+    if (user) {
+      res.send({ username: user.username });
+    } else {
+      res.status(401).send({ msg: 'Unauthorized' });
+    }
+  });
+
 // DeleteAuth logout a user
 apiRouter.delete('/auth/logout', (req, res) => {
   const user = Object.values(users).find((u) => u.token === req.body.token);

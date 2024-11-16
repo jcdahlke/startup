@@ -9,7 +9,8 @@ export function Login() {
     // Check if the user is already logged in when the component mounts
     useEffect(() => {
         const storedUsername = localStorage.getItem("userName");
-        if (storedUsername) {
+        const token = localStorage.getItem("authToken"); // Check if auth token is stored
+        if (storedUsername && token) {
             setUsername(storedUsername);
             setLoggedIn(true);
         }
@@ -36,7 +37,10 @@ export function Login() {
 
         if (response.ok) {
             const body = await response.json();
-            localStorage.setItem('userName', username);
+            // Assuming the response contains a token in `body.token`
+            const { token } = body;
+            localStorage.setItem('userName', username);  // Store username
+            localStorage.setItem('authToken', token);   // Store auth token
             setLoggedIn(true);
         } else {
             const errorBody = await response.text();
@@ -55,6 +59,7 @@ export function Login() {
         })
         .finally(() => {
             localStorage.removeItem('userName');
+            localStorage.removeItem('authToken');  // Remove auth token on logout
             setLoggedIn(false); // Reset loggedIn state on logout
         });
     }
