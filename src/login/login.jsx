@@ -3,34 +3,74 @@ import React, { useState } from "react";
 export function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loggedIn, setLoggedIn] = useState(false); // Track if user is logged in
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [token, setToken] = useState(null); // Store the token received from the server
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (username.trim() === "" || password.trim() === "") {
             alert("Please fill in both the username and password fields.");
             return;
         }
-        // Logic for login goes here
-        setLoggedIn(true); // Set the user as logged in
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setToken(data.token);
+                setLoggedIn(true);
+            } else {
+                alert("Login failed. Please check your credentials.");
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+        }
     };
 
-    const handleCreateAccount = () => {
+    const handleCreateAccount = async () => {
         if (username.trim() === "" || password.trim() === "") {
             alert("Please fill in both the username and password fields.");
             return;
         }
-        setLoggedIn(true); // Set the user as logged in
+
+        try {
+            const response = await fetch('/api/auth/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setToken(data.token);
+                setLoggedIn(true);
+            } else {
+                const errorData = await response.json();
+                alert(errorData.msg || "Account creation failed.");
+            }
+        } catch (error) {
+            console.error("Error during account creation:", error);
+        }
     };
 
-    const handleGuestLogin = () => {
-        console.log("Guest login clicked");
-        setLoggedIn(true); // Treat guest login as logged in
-    };
-
-    const handleLogout = () => {
-        setUsername("");
-        setPassword("");
-        setLoggedIn(false); // Log the user out
+    const handleLogout = async () => {
+        try {
+            await fetch('/api/auth/logout', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token })
+            });
+            setUsername("");
+            setPassword("");
+            setToken(null);
+            setLoggedIn(false);
+        } catch (error) {
+            console.error("Error during logout:", error);
+        }
     };
 
     return (
@@ -73,7 +113,7 @@ export function Login() {
                     <button type="button" className="btn btn-secondary" onClick={handleCreateAccount}>
                         Create
                     </button>
-                    <button type="button" className="btn btn-secondary" onClick={handleGuestLogin}>
+                    <button type="button" className="btn btn-secondary" onClick={() => alert("Guest login not yet implemented")}>
                         Guest
                     </button>
                 </form>
