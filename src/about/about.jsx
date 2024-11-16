@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './about.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 export function About() {
+    const [quote, setQuote] = useState('');
+
+    // Fetch quote from ZenQuotes API
+    useEffect(() => {
+        const fetchQuote = async () => {
+            const url = "https://api.api-ninjas.com/v1/quotes?category=happiness";
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-Api-Key': 'B4EwU7JjgsEpXowIeTGmNQ==lTrOOvMfg1FdxFrh' // Replace with your actual API key
+                }
+            };
+        
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setQuote(data[0]?.quote || 'No quote found.');
+            } catch (error) {
+                console.error("Error fetching quote:", error);
+                setQuote('Error fetching quote');
+            }
+        };
+
+        fetchQuote();
+    }, []); // The empty dependency array ensures this runs once on component mount
+
     return (
         <main>
             <h2>
@@ -89,6 +118,25 @@ export function About() {
                     <p>
                         <br /> Choose from 6 color displays—5 randomly generated and one that matches the given value. Select the correct one, submit your<br /> answer, and earn points if correct. Incorrect guesses reset your score. Play with friends and family to see who knows their colors best!
                     </p>
+                </div>
+            </div>
+
+            {/* Collapse Button for Inspirational Quote */}
+            <button 
+                className="btn btn-info mb-2" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#collapseQuote"
+                aria-expanded="false" 
+                aria-controls="collapseQuote"
+            >
+                Random Quote!
+            </button>
+
+            {/* Collapsible Content for Inspirational Quote */}
+            <div className="collapse" id="collapseQuote">
+                <div className="card card-body">
+                    <p>{quote || "Loading inspirational quote..."}</p>
                 </div>
             </div>
         </main>
