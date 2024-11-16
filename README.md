@@ -58,3 +58,12 @@ The application now works for a single user minus persistant storage.
   * **aplication logic** - Made game functional with random color changes and scoring system
 *  **Router** - Added router functioanlity to route between different pages without reloading.
 *  **Hooks** - Added states, instances, and effects to create functioanlity.
+
+## Service Deliverable
+For this deliverable I added backend endpoints that receives the scores and displays the highest ones.
+
+* **Node.js/Express HTTP service** - done.
+* **Static middleware for frontend** - done.
+* **Calls to third party endpoints** - I called a quote generator in about section.
+* **Backend service endpoints** - Added endpoints for scores and placeholders for logging in.
+* **Frontend calls service endpoints** - Done using the fetch function.
