@@ -14,6 +14,26 @@ export function Play() {
         return location.state?.username || `Guest_${Math.floor(Math.random() * 99999)}`;
     });
 
+    const [token, setToken] = useState(null);
+
+    useEffect(() => {
+        // Fetch user's high score when the component mounts
+        async function fetchHighScore() {
+            try {
+                const response = await fetch(`/api/scores?username=${username}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setHighScore(data.highScore || 0);
+                }
+            } catch (error) {
+                console.error("Error fetching high score:", error);
+            }
+        }
+
+        fetchHighScore();
+        randomizeColors();
+    }, [username]);
+
     // Function to generate a random RGB color
     function getRandomRGB() {
         const r = Math.floor(Math.random() * 256);
@@ -38,12 +58,7 @@ export function Play() {
         setColorStyles(colors.map(color => ({ backgroundColor: color })));
     }
 
-    // Call randomizeColors initially when the component is mounted
-    useEffect(() => {
-        randomizeColors();
-    }, []);
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const selectedColor = event.target.color.value;
         const selectedColorRGB = colorStyles[parseInt(selectedColor.split(" ")[1]) - 1].backgroundColor;
@@ -54,6 +69,20 @@ export function Play() {
 
             if (newScore > highScore) {
                 setHighScore(newScore);
+
+                // Send the new high score to the backend
+                try {
+                    await fetch('/api/score', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            username,
+                            score: newScore
+                        })
+                    });
+                } catch (error) {
+                    console.error("Error submitting high score:", error);
+                }
             }
         } else {
             setScore(0); // Reset score if incorrect
@@ -76,7 +105,7 @@ export function Play() {
                         <tr>
                             <td>
                                 <label>
-                                    <input type="radio" name="color" value="Color 1" />
+                                    <input type="radio" name="color" value="Color 1" required />
                                     <div className="color-box" style={colorStyles[0]}>Color 1</div>
                                 </label>
                             </td>
