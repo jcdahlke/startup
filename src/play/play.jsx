@@ -8,6 +8,7 @@ export function Play() {
     const [correctColor, setCorrectColor] = useState('');
     const [username, setUsername] = useState(null); // Initially null until fetched
     const [token, setToken] = useState(null);
+    const currentDate = new Date().toISOString()
 
     useEffect(() => {
         // Fetch username from localStorage directly
@@ -82,7 +83,8 @@ export function Play() {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             username,
-                            score: newScore
+                            score: newScore,
+                            date: currentDate, // Send the date with the score
                         })
                     });
                 } catch (error) {
