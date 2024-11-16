@@ -17,21 +17,44 @@ export function HighScores() {
     const [scores, setScores] = useState([]);
 
     useEffect(() => {
-        // Simulated fetching data from an API or external source
-        const fetchedScores = [
-            { rank: '1🥇', name: 'Gabbi', score: 100, date: 'May 14, 2021' },
-            { rank: '2🥈', name: 'James', score: 51, date: 'June 2, 2021' },
-            { rank: '3🥉', name: 'Matthew', score: 42, date: 'July 3, 2020' },
-            { rank: 4, name: 'Jacob', score: 39, date: 'July 18, 2021' },
-            { rank: 5, name: 'Joseph', score: 30, date: 'April 30, 2020' },
-            { rank: 6, name: 'Rachael', score: 28, date: 'December 20, 2022' },
-            { rank: 7, name: 'Taylor', score: 18, date: 'October 23, 2023' },
-            { rank: 8, name: 'Mckayla', score: 16, date: 'August 1, 2023' },
-            { rank: 9, name: 'Bryan', score: 15, date: 'May 20, 2021' },
-            { rank: 10, name: 'Kev', score: 11, date: 'January 15, 2022' }
-        ];
-        setScores(fetchedScores);
+        async function fetchHighScores() {
+            try {
+                // Fetch the high scores from the backend API
+                const response = await fetch('/api/scores');
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Format the data to add a rank and formatted date
+                    const formattedScores = data.map((score, index) => ({
+                        rank: `${index + 1} ${getRankSuffix(index + 1)}`,
+                        name: score.username,  // Assuming the username is part of the score object
+                        score: score.score,
+                        date: formatDate(score.date)  // Assuming the score object contains a date
+                    }));
+
+                    setScores(formattedScores);
+                }
+            } catch (error) {
+                console.error("Error fetching high scores:", error);
+            }
+        }
+
+        fetchHighScores();
     }, []);
+
+    // Helper function to get the rank suffix (e.g., 1st, 2nd, 3rd)
+    function getRankSuffix(rank) {
+        if (rank % 10 === 1 && rank !== 11) return "🥇";
+        if (rank % 10 === 2 && rank !== 12) return "🥈";
+        if (rank % 10 === 3 && rank !== 13) return "🥉";
+        return "th";
+    }
+
+    // Helper function to format the date (assumes date is in ISO format)
+    function formatDate(date) {
+        const d = new Date(date);
+        return d.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+    }
 
     return (
         <main>
