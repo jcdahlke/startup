@@ -21,12 +21,12 @@ app.use(`/api`, apiRouter);
 
 // CreateAuth a new user
 apiRouter.post('/auth/create', async (req, res) => {
-  const user = users[req.body.email];
+  const user = users[req.body.username];
   if (user) {
     res.status(409).send({ msg: 'Existing user' });
   } else {
-    const user = { email: req.body.email, password: req.body.password, token: uuid.v4() };
-    users[user.email] = user;
+    const user = { username: req.body.username, password: req.body.password, token: uuid.v4() };
+    users[user.username] = user;
 
     res.send({ token: user.token });
   }
@@ -34,15 +34,13 @@ apiRouter.post('/auth/create', async (req, res) => {
 
 // GetAuth login an existing user
 apiRouter.post('/auth/login', async (req, res) => {
-  const user = users[req.body.email];
-  if (user) {
-    if (req.body.password === user.password) {
-      user.token = uuid.v4();
-      res.send({ token: user.token });
-      return;
-    }
+  const user = users[req.body.username];
+  if (user && req.body.password === user.password) {
+    user.token = uuid.v4();
+    res.send({ token: user.token });
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
   }
-  res.status(401).send({ msg: 'Unauthorized' });
 });
 
 // DeleteAuth logout a user
