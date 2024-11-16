@@ -1,19 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export function Login(props) {
+export function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
     const [displayError, setDisplayError] = useState(""); // For displaying errors
 
+    // Check if the user is already logged in when the component mounts
+    useEffect(() => {
+        const storedUsername = localStorage.getItem("userName");
+        if (storedUsername) {
+            setUsername(storedUsername);
+            setLoggedIn(true);
+        }
+    }, []);
+
     async function loginUser() {
         loginOrCreate(`/api/auth/login`);
     }
-  
+
     async function createUser() {
         loginOrCreate(`/api/auth/create`);
     }
-  
+
     async function loginOrCreate(endpoint) {
         const response = await fetch(endpoint, {
             method: 'POST',
@@ -22,14 +31,13 @@ export function Login(props) {
                 'Content-type': 'application/json; charset=UTF-8',
             },
         });
-    
+
         console.log("Request sent:", { username, password }); // Log the request body
-    
+
         if (response.ok) {
             const body = await response.json();
             localStorage.setItem('userName', username);
             setLoggedIn(true);
-            props.onLogin(username);
         } else {
             const errorBody = await response.text();
             console.error("Error response:", errorBody); // Log the error body
@@ -37,9 +45,7 @@ export function Login(props) {
             setDisplayError(`⚠ Error: ${parsedError.msg || "An error occurred"}`);
         }
     }
-    
-    
-  
+
     function logout() {
         fetch(`/api/auth/logout`, {
             method: 'DELETE',
@@ -50,7 +56,6 @@ export function Login(props) {
         .finally(() => {
             localStorage.removeItem('userName');
             setLoggedIn(false); // Reset loggedIn state on logout
-            props.onLogout(); // Assuming onLogout is a parent function passed as a prop
         });
     }
 
