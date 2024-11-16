@@ -47,3 +47,14 @@ For this deliverable I properly styled the application into its final appearance
 * **Application Elements** - I implemented a grid element for the scores page, and implemented good contrast.
 * **Application Text Content** - Consistent fonts and font color. Also changed color of some text and underlined some parts.
 * **Application Images** - Curved the edges of the images and added shadows to make them fit in
+
+## React Deliverable
+The application now works for a single user minus persistant storage.
+* **Bundled and Transpiled** - This was done using Vite
+* **Components** - I added functionality to color game, and mocked login and set up for websocket
+  * **Login** - Cannot be left empty, and added guest feature functionality
+  * **database** - Created temporary instances of variables that will eventually be stored in the database.
+  * **websocket** - mocked it so when it is added it can be easily included.
+  * **aplication logic** - Made game functional with random color changes and scoring system
+*  **Router** - Added router functioanlity to route between different pages without reloading.
+*  **Hooks** - Added states, instances, and effects to create functioanlity.
