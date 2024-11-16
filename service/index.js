@@ -7,7 +7,7 @@ let users = {};
 let scores = [];
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
+const port = process.argv.length > 2 ? process.argv[2] : 3000;
 
 // JSON body parsing using built-in middleware
 app.use(express.json());
@@ -35,12 +35,14 @@ apiRouter.post('/auth/create', async (req, res) => {
 // GetAuth login an existing user
 apiRouter.post('/auth/login', async (req, res) => {
   const user = users[req.body.username];
-  if (user && req.body.password === user.password) {
-    user.token = uuid.v4();
-    res.send({ token: user.token });
-  } else {
-    res.status(401).send({ msg: 'Unauthorized' });
+  if (user) {
+    if (req.body.password === user.password) {
+      user.token = uuid.v4();
+      res.send({ token: user.token });
+      return;
+    }
   }
+  res.status(401).send({ msg: 'Unauthorized' });
 });
 
 // DeleteAuth logout a user

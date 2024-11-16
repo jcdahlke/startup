@@ -1,77 +1,58 @@
 import React, { useState } from "react";
 
-export function Login() {
+export function Login(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
-    const [token, setToken] = useState(null); // Store the token received from the server
+    const [displayError, setDisplayError] = useState(""); // For displaying errors
 
-    const handleLogin = async () => {
-        if (username.trim() === "" || password.trim() === "") {
-            alert("Please fill in both the username and password fields.");
-            return;
+    async function loginUser() {
+        loginOrCreate(`/api/auth/login`);
+    }
+  
+    async function createUser() {
+        loginOrCreate(`/api/auth/create`);
+    }
+  
+    async function loginOrCreate(endpoint) {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: JSON.stringify({ username: username, password: password }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+    
+        console.log("Request sent:", { username, password }); // Log the request body
+    
+        if (response.ok) {
+            const body = await response.json();
+            localStorage.setItem('userName', username);
+            setLoggedIn(true);
+            props.onLogin(username);
+        } else {
+            const errorBody = await response.text();
+            console.error("Error response:", errorBody); // Log the error body
+            const parsedError = errorBody ? JSON.parse(errorBody) : { msg: "Unknown error" };
+            setDisplayError(`⚠ Error: ${parsedError.msg || "An error occurred"}`);
         }
-
-        try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setToken(data.token);
-                setLoggedIn(true);
-            } else {
-                alert("Login failed. Please check your credentials.");
-            }
-        } catch (error) {
-            console.error("Error during login:", error);
-        }
-    };
-
-    const handleCreateAccount = async () => {
-        if (username.trim() === "" || password.trim() === "") {
-            alert("Please fill in both the username and password fields.");
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/auth/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setToken(data.token);
-                setLoggedIn(true);
-            } else {
-                const errorData = await response.json();
-                alert(errorData.msg || "Account creation failed.");
-            }
-        } catch (error) {
-            console.error("Error during account creation:", error);
-        }
-    };
-
-    const handleLogout = async () => {
-        try {
-            await fetch('/api/auth/logout', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token })
-            });
-            setUsername("");
-            setPassword("");
-            setToken(null);
-            setLoggedIn(false);
-        } catch (error) {
-            console.error("Error during logout:", error);
-        }
-    };
+    }
+    
+    
+  
+    function logout() {
+        fetch(`/api/auth/logout`, {
+            method: 'DELETE',
+        })
+        .catch(() => {
+            // Logout failed. Assuming offline
+        })
+        .finally(() => {
+            localStorage.removeItem('userName');
+            setLoggedIn(false); // Reset loggedIn state on logout
+            props.onLogout(); // Assuming onLogout is a parent function passed as a prop
+        });
+    }
 
     return (
         <main>
@@ -83,7 +64,7 @@ export function Login() {
             {loggedIn ? (
                 <div>
                     <h2>Hello, {username || "Guest"}!</h2>
-                    <button type="button" className="btn btn-secondary" onClick={handleLogout}>
+                    <button type="button" className="btn btn-secondary" onClick={logout}>
                         Logout
                     </button>
                 </div>
@@ -107,15 +88,16 @@ export function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <button type="button" className="btn btn-primary" onClick={handleLogin}>
+                    <button type="button" className="btn btn-primary" onClick={loginUser}>
                         Login
                     </button>
-                    <button type="button" className="btn btn-secondary" onClick={handleCreateAccount}>
-                        Create
+                    <button type="button" className="btn btn-secondary" onClick={createUser}>
+                        Create Account
                     </button>
                     <button type="button" className="btn btn-secondary" onClick={() => alert("Guest login not yet implemented")}>
                         Guest
                     </button>
+                    {displayError && <div className="error">{displayError}</div>}
                 </form>
             )}
             <img
