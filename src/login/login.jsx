@@ -33,7 +33,7 @@ export function Login() {
             },
         });
 
-        console.log("Request sent:", { username, password }); // Log the request body
+        // console.log("Request sent:", { username, password }); // Log the request body
 
         if (response.ok) {
             const body = await response.json();
@@ -44,7 +44,7 @@ export function Login() {
             setLoggedIn(true);
         } else {
             const errorBody = await response.text();
-            console.error("Error response:", errorBody); // Log the error body
+            // console.error("Error response:", errorBody); // Log the error body
             const parsedError = errorBody ? JSON.parse(errorBody) : { msg: "Unknown error" };
             setDisplayError(`⚠ Error: ${parsedError.msg || "An error occurred"}`);
         }
@@ -104,9 +104,9 @@ export function Login() {
                     <button type="button" className="btn btn-secondary" onClick={createUser}>
                         Create Account
                     </button>
-                    <button type="button" className="btn btn-secondary" onClick={() => alert("Guest login not yet implemented")}>
+                    {/* <button type="button" className="btn btn-secondary" onClick={() => alert("Guest login not yet implemented")}>
                         Guest
-                    </button>
+                    </button> */}
                     {displayError && <div className="error">{displayError}</div>}
                 </form>
             )}
