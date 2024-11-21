@@ -1,8 +1,9 @@
 const express = require('express');
-const { getUser, getUserByToken, createUser, addScore, getHighScores } = require('./db'); // Import MongoDB functions
+const { getUser, getUserByToken, createUser, addScore, getHighScores } = require('./database.js'); // Import MongoDB functions
 const bcrypt = require('bcrypt'); // For secure password comparison
 const uuid = require('uuid');
 const app = express();
+const cookieParser = require('cookie-parser');
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -45,7 +46,10 @@ apiRouter.post('/auth/login', async (req, res) => {
       const token = uuid.v4(); // Generate a new token
       user.token = token; // Update token in the database
       await userCollection.updateOne({ username }, { $set: { token } }); // Update token in MongoDB
-      res.send({ token });
+
+      // Set token as a cookie
+      res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+      res.send({ msg: 'Login successful' });
     } else {
       res.status(401).send({ msg: 'Unauthorized' });
     }
@@ -55,9 +59,10 @@ apiRouter.post('/auth/login', async (req, res) => {
   }
 });
 
+
 // GetAuth username (new endpoint to get the current user's username)
 apiRouter.get('/auth/username', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Token passed as Bearer <token>
+  const token = req.cookies.token; // Retrieve token from cookies
   if (!token) return res.status(401).send({ msg: 'Unauthorized' });
 
   try {
@@ -75,7 +80,7 @@ apiRouter.get('/auth/username', async (req, res) => {
 
 // DeleteAuth: Logout a user
 apiRouter.delete('/auth/logout', async (req, res) => {
-  const token = req.body.token;
+  const token = req.cookies.token; // Get token from cookie
   if (!token) return res.status(400).send({ msg: 'Token required' });
 
   try {
@@ -83,6 +88,8 @@ apiRouter.delete('/auth/logout', async (req, res) => {
     if (user) {
       await userCollection.updateOne({ token }, { $unset: { token: "" } }); // Remove token in MongoDB
     }
+    // Clear the token cookie
+    res.clearCookie('token');
     res.status(204).end();
   } catch (err) {
     console.error(err);
