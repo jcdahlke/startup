@@ -23,24 +23,42 @@ export function HighScores() {
                 const response = await fetch('/api/scores');
                 if (response.ok) {
                     const data = await response.json();
-
+    
+                    // Deduplicate and keep only the highest score per username
+                    const uniqueScores = Object.values(
+                        data.reduce((acc, score) => {
+                            const { username, score: userScore } = score;
+                            // If the username is not already in the accumulator or has a higher score, update it
+                            if (!acc[username] || userScore > acc[username].score) {
+                                acc[username] = score;
+                            }
+                            return acc;
+                        }, {})
+                    );
+    
+                    // Sort by score descending and take the top 10
+                    const topScores = uniqueScores
+                        .sort((a, b) => b.score - a.score)
+                        .slice(0, 10);
+    
                     // Format the data to add a rank and formatted date
-                    const formattedScores = data.map((score, index) => ({
+                    const formattedScores = topScores.map((score, index) => ({
                         rank: `${index + 1} ${getRankSuffix(index + 1)}`,
                         name: score.username,  // Assuming the username is part of the score object
                         score: score.score,
                         date: formatDate(score.date)  // Assuming the score object contains a date
                     }));
-
+    
                     setScores(formattedScores);
                 }
             } catch (error) {
                 console.error("Error fetching high scores:", error);
             }
         }
-
+    
         fetchHighScores();
     }, []);
+    
 
     // Helper function to get the rank suffix (e.g., 1st, 2nd, 3rd)
     function getRankSuffix(rank) {
