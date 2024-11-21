@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUser, getUserByToken, createUser, addScore, getHighScores } = require('./database.js'); // Import MongoDB functions
+const DB = require('./database.js'); // Import MongoDB functions
 const bcrypt = require('bcrypt'); // For secure password comparison
 const uuid = require('uuid');
 const app = express();
@@ -10,6 +10,7 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 // JSON body parsing using built-in middleware
 app.use(express.json());
+app.use(cookieParser()); // Ensure this is added to parse cookies
 
 // Serve up the front-end static content hosting
 app.use(express.static('public'));
@@ -22,12 +23,12 @@ app.use(`/api`, apiRouter);
 apiRouter.post('/auth/create', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const existingUser = await getUser(username);
+    const existingUser = await DB.getUser(username);
 
     if (existingUser) {
       res.status(409).send({ msg: 'Existing user' });
     } else {
-      const user = await createUser(username, password); // Use MongoDB logic to create user
+      const user = await DB.createUser(username, password); // Use MongoDB logic to create user
       res.send({ token: user.token });
     }
   } catch (err) {
@@ -40,12 +41,14 @@ apiRouter.post('/auth/create', async (req, res) => {
 apiRouter.post('/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await getUser(username);
+    const user = await DB.getUser(username);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = uuid.v4(); // Generate a new token
       user.token = token; // Update token in the database
-      await userCollection.updateOne({ username }, { $set: { token } }); // Update token in MongoDB
+
+      // Update the token in MongoDB using DB's method (no need for userCollection directly)
+      await DB.updateUserToken(username, token);
 
       // Set token as a cookie
       res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
@@ -59,14 +62,13 @@ apiRouter.post('/auth/login', async (req, res) => {
   }
 });
 
-
 // GetAuth username (new endpoint to get the current user's username)
 apiRouter.get('/auth/username', async (req, res) => {
   const token = req.cookies.token; // Retrieve token from cookies
   if (!token) return res.status(401).send({ msg: 'Unauthorized' });
 
   try {
-    const user = await getUserByToken(token); // Use MongoDB logic to find user by token
+    const user = await DB.getUserByToken(token); // Use MongoDB logic to find user by token
     if (user) {
       res.send({ username: user.username });
     } else {
@@ -84,9 +86,10 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   if (!token) return res.status(400).send({ msg: 'Token required' });
 
   try {
-    const user = await getUserByToken(token);
+    const user = await DB.getUserByToken(token);
     if (user) {
-      await userCollection.updateOne({ token }, { $unset: { token: "" } }); // Remove token in MongoDB
+      // Remove the token from MongoDB
+      await DB.removeUserToken(token);
     }
     // Clear the token cookie
     res.clearCookie('token');
@@ -100,7 +103,7 @@ apiRouter.delete('/auth/logout', async (req, res) => {
 // GetScores: Fetch high scores
 apiRouter.get('/scores', async (_req, res) => {
   try {
-    const highScores = await getHighScores(); // Fetch high scores from MongoDB
+    const highScores = await DB.getHighScores(); // Fetch high scores from MongoDB
     res.send(highScores);
   } catch (err) {
     console.error(err);
@@ -112,8 +115,8 @@ apiRouter.get('/scores', async (_req, res) => {
 apiRouter.post('/score', async (req, res) => {
   try {
     const newScore = req.body;
-    await addScore(newScore); // Add score to MongoDB
-    const highScores = await getHighScores(); // Get updated high scores
+    await DB.addScore(newScore); // Add score to MongoDB
+    const highScores = await DB.getHighScores(); // Get updated high scores
     res.send(highScores);
   } catch (err) {
     console.error(err);
