@@ -29,7 +29,18 @@ apiRouter.post('/auth/create', async (req, res) => {
       res.status(409).send({ msg: 'Existing user' });
     } else {
       const user = await DB.createUser(username, password); // Use MongoDB logic to create user
-      res.send({ token: user.token });
+      const token = uuid.v4();
+      await DB.updateUserToken(username, token);
+
+      // Set token as a cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      res.send({
+      msg: 'Register successful'});
     }
   } catch (err) {
     console.error(err);
