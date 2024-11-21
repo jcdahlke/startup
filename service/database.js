@@ -39,6 +39,14 @@ const scoreCollection = db.collection('score');
     return user;
   }
   
+  async function updateUserToken (username, token) {
+    await db.collection('users').updateOne({ username }, { $set: { token } });
+  }
+
+  async function removeUserToken(token) {
+    await db.collection('users').updateOne({ token }, { $unset: { token: "" } });
+  }
+
   async function addScore(score) {
     return scoreCollection.insertOne(score);
   }
@@ -59,4 +67,6 @@ const scoreCollection = db.collection('score');
     createUser,
     addScore,
     getHighScores,
+    updateUserToken,
+    removeUserToken
   };
