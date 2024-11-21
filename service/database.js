@@ -18,7 +18,7 @@ const scoreCollection = db.collection('score');
   });
   
   function getUser(username) {
-    return userCollection.findOne({ username }, { projection: { username: 1, highScore: 1 } });
+    return userCollection.findOne({ username }, { projection: { username: 1, highScore: 1, password: 1 } } );
   }
   
   function getUserByToken(token) {
@@ -40,13 +40,13 @@ const scoreCollection = db.collection('score');
 }
 
   
-  async function updateUserToken (username, token) {
-    await db.collection('users').updateOne({ username }, { $set: { token } });
-  }
+async function updateUserToken(username, token) {
+    await userCollection.updateOne({ username }, { $set: { token } });
+}
 
-  async function removeUserToken(token) {
-    await db.collection('users').updateOne({ token }, { $unset: { token: "" } });
-  }
+async function removeUserToken(token) {
+    await userCollection.updateOne({ token }, { $unset: { token: "" } });
+}
 
   async function addScore(score) {
      // Add the score to the scores collection

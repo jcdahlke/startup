@@ -27,6 +27,7 @@ export function Login() {
     async function loginOrCreate(endpoint) {
         const response = await fetch(endpoint, {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify({ username: username, password: password }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',

@@ -41,20 +41,45 @@ apiRouter.post('/auth/create', async (req, res) => {
 apiRouter.post('/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await DB.getUser(username);
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const token = uuid.v4(); // Generate a new token
-      await DB.updateUserToken(username, token); // Update the token in MongoDB
-
-      // Set token as a cookie
-      res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-
-      // Send high score along with the success message
-      res.send({ msg: 'Login successful', highScore: user.highScore });
-    } else {
-      res.status(401).send({ msg: 'Unauthorized' });
+    // Validate input
+    if (!username || !password) {
+      return res.status(400).send({ msg: 'Username and password are required' });
     }
+
+    // Retrieve user from database
+    const user = await DB.getUser(username);
+    if (!user) {
+      return res.status(404).send({ msg: 'User not found' });
+    }
+
+    if (!user.password) {
+      return res.status(500).send({ msg: 'Password hash is missing for the user' });
+    }
+
+    // Validate password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).send({ msg: 'Unauthorized' });
+    }
+
+    // Generate and store token
+    const token = uuid.v4();
+    await DB.updateUserToken(username, token);
+
+    // Set token as a cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    // Respond with success and user data
+    res.send({
+      msg: 'Login successful',
+      highScore: user.highScore || 0, // Provide default value if highScore is undefined
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send({ msg: 'Internal server error' });
@@ -64,16 +89,22 @@ apiRouter.post('/auth/login', async (req, res) => {
 
 // GetAuth username (new endpoint to get the current user's username)
 apiRouter.get('/auth/username', async (req, res) => {
-  const token = req.cookies.token; // Retrieve token from cookies
-  if (!token) return res.status(401).send({ msg: 'Unauthorized' });
-
   try {
-    const user = await DB.getUserByToken(token); // Use MongoDB logic to find user by token
-    if (user) {
-      res.send({ username: user.username, highScore: user.highScore });
-    } else {
-      res.status(401).send({ msg: 'Unauthorized' });
+    const token = req.cookies.token; // Get token from cookies
+    if (!token) {
+      return res.status(401).send({ msg: 'Unauthorized' }); // If no token, return unauthorized
     }
+
+    // Verify token, find user, and send data
+    const user = await DB.getUserByToken(token); // Example function to find user from token
+    if (!user) {
+      return res.status(404).send({ msg: 'User not found' });
+    }
+
+    res.send({
+      username: user.username,
+      highScore: user.highScore,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send({ msg: 'Internal server error' });

@@ -7,40 +7,32 @@ export function Play() {
     const [colorStyles, setColorStyles] = useState([]);
     const [correctColor, setCorrectColor] = useState('');
     const [username, setUsername] = useState(null); // Initially null until fetched
-    const [token, setToken] = useState(null);
-    const currentDate = new Date().toISOString()
+    const currentDate = new Date().toISOString();
 
     useEffect(() => {
-        // Fetch username from localStorage directly
-        const storedUsername = localStorage.getItem("userName");
-        if (storedUsername) {
-            setUsername(storedUsername);
-        } else {
-            setUsername("Guest"); // Fallback to "Guest" if no username is found
+        async function fetchUserData() {
+            try {
+                
+                const response = await fetch('/api/auth/username', {
+                    method: 'GET',
+                    credentials: 'include', // Ensure cookies are sent with the request
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setUsername(data.username || "Guest");
+                    setHighScore(data.highScore || 0);
+                } else {
+                    console.error("Failed to fetch user data:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
         }
+
+        fetchUserData();
         randomizeColors();
     }, []);
 
-    useEffect(() => {
-        if (username) {
-            // Fetch user's high score when username is set
-            async function fetchHighScore() {
-                try {
-                    const response = await fetch(`/api/scores?username=${username}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setHighScore(data.highScore || 0);
-                    }
-                } catch (error) {
-                    console.error("Error fetching high score:", error);
-                }
-            }
-
-            fetchHighScore();
-        }
-    }, [username]);
-
-    // Function to generate a random RGB color
     function getRandomRGB() {
         const r = Math.floor(Math.random() * 256);
         const g = Math.floor(Math.random() * 256);
@@ -48,18 +40,9 @@ export function Play() {
         return `rgb(${r}, ${g}, ${b})`;
     }
 
-    // Function to randomize color styles and set the correct color
     function randomizeColors() {
-        const colors = [
-            getRandomRGB(),
-            getRandomRGB(),
-            getRandomRGB(),
-            getRandomRGB(),
-            getRandomRGB(),
-            getRandomRGB()
-        ];
-
-        const randomIndex = Math.floor(Math.random() * 6);
+        const colors = Array.from({ length: 6 }, getRandomRGB);
+        const randomIndex = Math.floor(Math.random() * colors.length);
         setCorrectColor(colors[randomIndex]);
         setColorStyles(colors.map(color => ({ backgroundColor: color })));
     }
@@ -75,8 +58,6 @@ export function Play() {
 
             if (newScore > highScore) {
                 setHighScore(newScore);
-
-                // Send the new high score to the backend
                 try {
                     await fetch('/api/score', {
                         method: 'POST',
@@ -84,19 +65,20 @@ export function Play() {
                         body: JSON.stringify({
                             username,
                             score: newScore,
-                            date: currentDate, // Send the date with the score
-                        })
+                            date: currentDate,
+                        }),
                     });
                 } catch (error) {
                     console.error("Error submitting high score:", error);
                 }
             }
         } else {
-            setScore(0); // Reset score if incorrect
+            setScore(0);
         }
 
         randomizeColors();
     };
+
 
     if (!username) {
         return <p>Loading...</p>; // Wait until the username is fetched from localStorage
