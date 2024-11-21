@@ -18,7 +18,7 @@ const scoreCollection = db.collection('score');
   });
   
   function getUser(username) {
-    return userCollection.findOne({ username: username });
+    return userCollection.findOne({ username }, { projection: { username: 1, highScore: 1 } });
   }
   
   function getUserByToken(token) {
@@ -26,18 +26,19 @@ const scoreCollection = db.collection('score');
   }
   
   async function createUser(username, password) {
-    // Hash the password before we insert it into the database
     const passwordHash = await bcrypt.hash(password, 10);
-  
+
     const user = {
-      username: username,
-      password: passwordHash,
-      token: uuid.v4(),
+        username: username,
+        password: passwordHash,
+        token: uuid.v4(),
+        highScore: 0, // Initialize high score to 0
     };
     await userCollection.insertOne(user);
-  
+
     return user;
-  }
+}
+
   
   async function updateUserToken (username, token) {
     await db.collection('users').updateOne({ username }, { $set: { token } });
@@ -48,7 +49,11 @@ const scoreCollection = db.collection('score');
   }
 
   async function addScore(score) {
-    return scoreCollection.insertOne(score);
+     // Add the score to the scores collection
+     await scoreCollection.insertOne({ username, score });
+
+     // Check if the high score needs to be updated
+     await updateHighScore(username, score);
   }
   
   function getHighScores() {
@@ -61,6 +66,17 @@ const scoreCollection = db.collection('score');
     return cursor.toArray();
   }
   
+  async function updateHighScore(username, newScore) {
+    const user = await getUser(username);
+    if (!user) throw new Error('User not found');
+
+    if (newScore > user.highScore) {
+        await userCollection.updateOne(
+            { username: username },
+            { $set: { highScore: newScore } }
+        );
+    }
+}
   module.exports = {
     getUser,
     getUserByToken,
@@ -68,5 +84,6 @@ const scoreCollection = db.collection('score');
     addScore,
     getHighScores,
     updateUserToken,
-    removeUserToken
+    removeUserToken,
+    updateHighScore
   };

@@ -45,14 +45,13 @@ apiRouter.post('/auth/login', async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = uuid.v4(); // Generate a new token
-      user.token = token; // Update token in the database
-
-      // Update the token in MongoDB using DB's method (no need for userCollection directly)
-      await DB.updateUserToken(username, token);
+      await DB.updateUserToken(username, token); // Update the token in MongoDB
 
       // Set token as a cookie
       res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-      res.send({ msg: 'Login successful' });
+
+      // Send high score along with the success message
+      res.send({ msg: 'Login successful', highScore: user.highScore });
     } else {
       res.status(401).send({ msg: 'Unauthorized' });
     }
@@ -61,6 +60,7 @@ apiRouter.post('/auth/login', async (req, res) => {
     res.status(500).send({ msg: 'Internal server error' });
   }
 });
+
 
 // GetAuth username (new endpoint to get the current user's username)
 apiRouter.get('/auth/username', async (req, res) => {
@@ -70,7 +70,7 @@ apiRouter.get('/auth/username', async (req, res) => {
   try {
     const user = await DB.getUserByToken(token); // Use MongoDB logic to find user by token
     if (user) {
-      res.send({ username: user.username });
+      res.send({ username: user.username, highScore: user.highScore });
     } else {
       res.status(401).send({ msg: 'Unauthorized' });
     }
@@ -79,6 +79,7 @@ apiRouter.get('/auth/username', async (req, res) => {
     res.status(500).send({ msg: 'Internal server error' });
   }
 });
+
 
 // DeleteAuth: Logout a user
 apiRouter.delete('/auth/logout', async (req, res) => {
@@ -114,15 +115,18 @@ apiRouter.get('/scores', async (_req, res) => {
 // SubmitScore: Add a new score
 apiRouter.post('/score', async (req, res) => {
   try {
-    const newScore = req.body;
-    await DB.addScore(newScore); // Add score to MongoDB
+    const { username, score } = req.body;
+    await DB.addScore(username, score); // Add score to MongoDB
+    const user = await DB.getUser(username); // Get the updated user data
     const highScores = await DB.getHighScores(); // Get updated high scores
-    res.send(highScores);
+
+    res.send({ highScores, userHighScore: user.highScore }); // Include user's high score in the response
   } catch (err) {
     console.error(err);
     res.status(500).send({ msg: 'Internal server error' });
   }
 });
+
 
 // Return the application's default page if the path is unknown
 app.use((_req, res) => {
