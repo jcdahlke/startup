@@ -48,23 +48,25 @@ async function removeUserToken(token) {
     await userCollection.updateOne({ token }, { $unset: { token: "" } });
 }
 
-  async function addScore(username, score) {
-     // Add the score to the scores collection
-     await scoreCollection.insertOne({ username, score });
+async function addScore(username, score) {
+    const currentDate = new Date().toISOString(); // Capture the current date
+    await scoreCollection.insertOne({ username, score, date: currentDate }); // Include date
 
-     // Check if the high score needs to be updated
-     await updateHighScore(username, score);
-  }
+    // Check if the high score needs to be updated
+    await updateHighScore(username, score);
+}
   
-  function getHighScores() {
+function getHighScores() {
     const query = { score: { $gt: 0, $lt: 900 } };
     const options = {
-      sort: { score: -1 },
-      limit: 10,
+        sort: { score: -1 },
+        limit: 10,
+        projection: { username: 1, score: 1, date: 1 }, // Include the date field
     };
     const cursor = scoreCollection.find(query, options);
     return cursor.toArray();
-  }
+}
+
   
   async function updateHighScore(username, newScore) {
     const user = await getUser(username);
