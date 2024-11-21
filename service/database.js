@@ -48,7 +48,7 @@ async function removeUserToken(token) {
     await userCollection.updateOne({ token }, { $unset: { token: "" } });
 }
 
-  async function addScore(score) {
+  async function addScore(username, score) {
      // Add the score to the scores collection
      await scoreCollection.insertOne({ username, score });
 
