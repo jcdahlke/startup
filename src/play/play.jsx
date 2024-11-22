@@ -81,7 +81,7 @@ export function Play() {
 
 
     if (!username) {
-        return <p>Loading...</p>; // Wait until the username is fetched from localStorage
+        return <p>Please Login to play 🙂</p>; // Wait until the username is fetched from localStorage
     }
 
     return (
