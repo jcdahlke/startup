@@ -67,3 +67,13 @@ For this deliverable I added backend endpoints that receives the scores and disp
 * **Calls to third party endpoints** - I called a quote generator in about section.
 * **Backend service endpoints** - Added endpoints for scores and placeholders for logging in.
 * **Frontend calls service endpoints** - Done using the fetch function.
+
+## DB/Login deliverable
+For this deliverable I stored encrypted login info in database as well as scores associated with the user.
+
+* **MongoDB Atlas database created** - done.
+* **Stores data in MongoDB** - done, stores login info, scores, and auth.
+* **User registration** - Creates a new account in the database.
+* **existing user** - Returns an error if user already exists in the db.
+* **Use MongoDB to store credentials** - Stores both encrypted user info and their scores.
+* **Restricts functionality** - You can only play when logged in. An authtoken stored in the cookie is need to play.
