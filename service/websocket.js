@@ -15,6 +15,14 @@ function peerProxy(httpServer) {
   // Keep track of all the connections so we can forward messages
   let connections = [];
 
+  function broadcast(data) {
+    connections.forEach((c) => {
+      if (c.ws.readyState === c.ws.OPEN) {
+        c.ws.send(JSON.stringify(data));
+      }
+    });
+  }
+
   wss.on('connection', (ws) => {
     const connection = { id: uuid.v4(), alive: true, ws: ws };
     connections.push(connection);

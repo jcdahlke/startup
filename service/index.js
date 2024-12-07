@@ -5,7 +5,11 @@ const uuid = require('uuid');
 const app = express();
 const cookieParser = require('cookie-parser');
 
-const { websocket } = require('./websocket.js');
+const { peerProxy } = require('./websocket.js');
+const httpService = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+const ws = peerProxy(httpService);
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -87,6 +91,8 @@ apiRouter.post('/auth/login', async (req, res) => {
       sameSite: 'Strict',
       maxAge: 24 * 60 * 60 * 1000,
     });
+
+    ws.broadcast({type: "login", user: username});
 
     // Respond with success and user data
     res.send({
@@ -181,9 +187,7 @@ app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
-const httpService = app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
 
 
-websocket(httpService);
+
+peerProxy(httpService);
