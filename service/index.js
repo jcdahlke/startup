@@ -5,6 +5,8 @@ const uuid = require('uuid');
 const app = express();
 const cookieParser = require('cookie-parser');
 
+const { websocket } = require('./websocket.js');
+
 // The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
@@ -178,3 +180,10 @@ app.use((_req, res) => {
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+const httpService = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+
+
+websocket(httpService);
