@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { GameEvent, GameNotifier } from './gamePlayNotifier';
 import './play.css';
 
 export function Play() {
@@ -6,13 +7,16 @@ export function Play() {
     const [highScore, setHighScore] = useState(0);
     const [colorStyles, setColorStyles] = useState([]);
     const [correctColor, setCorrectColor] = useState('');
-    const [username, setUsername] = useState(null); // Initially null until fetched
+    const [username, setUsername] = useState(null);
+    const [messages, setMessages] = useState([]); // State to hold incoming messages
+    const [canSubmit, setCanSubmit] = useState(true); // Track if the submit button should be enabled
     const currentDate = new Date().toISOString();
+
+    const wsRef = useRef(null);
 
     useEffect(() => {
         async function fetchUserData() {
             try {
-                
                 const response = await fetch('/api/auth/username', {
                     method: 'GET',
                     credentials: 'include', // Ensure cookies are sent with the request
@@ -31,24 +35,27 @@ export function Play() {
 
         fetchUserData();
         randomizeColors();
+
+
+        const ws = new WebSocket(`ws://localhost:4000/wss`);
+        wsRef.current = ws;
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'login') {
+                console.log(`User logged in: ${data.user}`);
+                setMessages(prevMessages => [...prevMessages, `User logged in: ${data.user}`]); // Store message
+            } else if (data.type === 'score') {
+                console.log(`Player scored: ${data.user}, Score: ${data.score}`);
+                setMessages(prevMessages => [...prevMessages, `Player scored: ${data.user}, Score: ${data.score}`]); // Store message
+            }
+        };
+        
+        return () => {
+            ws.close();
+        };
     }, []);
 
-    useEffect(() => {
-        const ws = new WebSocket(`ws://${window.location.host}`);
-      
-        ws.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-          if (data.type === 'login') {
-            console.log(`User logged in: ${data.user}`);
-          } else if (data.type === 'score') {
-            console.log(`Player scored: ${data.user}, Score: ${data.score}`);
-          }
-        };
-      
-        return () => {
-          ws.close();
-        };
-      }, []);
 
     function getRandomRGB() {
         const r = Math.floor(Math.random() * 256);
@@ -72,6 +79,7 @@ export function Play() {
         if (selectedColorRGB === correctColor) {
             const newScore = score + 1;
             setScore(newScore);
+            setCanSubmit(true); // Allow submission again
 
             if (newScore > highScore) {
                 setHighScore(newScore);
@@ -90,18 +98,19 @@ export function Play() {
                 }
             }
         } else {
-            if (score > 0) {
-                ws.send(JSON.stringify({ type: 'score', user: username, score }));
-              }
+            const tempScore = score;
             setScore(0);
+            if (score > 0) {
+                wsRef.current.send(JSON.stringify({ type: 'score', user: username, tempScore }));
+            }
+            
         }
 
         randomizeColors();
     };
 
-
     if (!username) {
-        return <p>Please Login to play 🙂</p>; // Wait until the username is fetched from localStorage
+        return <p>Please Login to play 🙂</p>;
     }
 
     return (
@@ -109,6 +118,14 @@ export function Play() {
             <div className="play-div">
                 Player: {username} <br /> High Score: {highScore} <br /> Current Score: {score}
             </div>
+
+            {/* Display incoming messages */}
+            <div className="messages">
+                {messages.map((message, index) => (
+                    <p key={index}>{message}</p>
+                ))}
+            </div>
+
             <form id="colorForm" onSubmit={handleSubmit}>
                 <p style={{ textAlign: 'center' }}>
                     RGB Value: {correctColor}
@@ -158,7 +175,10 @@ export function Play() {
                     </tbody>
                 </table>
                 <div style={{ textAlign: 'center' }}>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    {/* Enable the submit button based on canSubmit state */}
+                    <button type="submit" className="btn btn-primary" disabled={!canSubmit}>
+                        Submit
+                    </button>
                 </div>
             </form>
         </main>

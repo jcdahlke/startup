@@ -9,11 +9,7 @@ const cookieParser = require('cookie-parser');
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-const { peerProxy } = require('./websocket.js');
-const httpService = app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
-const ws = peerProxy(httpService);
+
 // JSON body parsing using built-in middleware
 app.use(express.json());
 app.use(cookieParser()); // Ensure this is added to parse cookies
@@ -92,7 +88,7 @@ apiRouter.post('/auth/login', async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    ws.broadcast({type: "login", user: username});
+
 
     // Respond with success and user data
     res.send({
@@ -185,7 +181,9 @@ app.use((_req, res) => {
 
 
 
-
-
+const httpService = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
 
 peerProxy(httpService);
+
