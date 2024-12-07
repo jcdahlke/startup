@@ -33,6 +33,23 @@ export function Play() {
         randomizeColors();
     }, []);
 
+    useEffect(() => {
+        const ws = new WebSocket(`ws://${window.location.host}`);
+      
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          if (data.type === 'login') {
+            console.log(`User logged in: ${data.user}`);
+          } else if (data.type === 'score') {
+            console.log(`Player scored: ${data.user}, Score: ${data.score}`);
+          }
+        };
+      
+        return () => {
+          ws.close();
+        };
+      }, []);
+
     function getRandomRGB() {
         const r = Math.floor(Math.random() * 256);
         const g = Math.floor(Math.random() * 256);
@@ -73,6 +90,9 @@ export function Play() {
                 }
             }
         } else {
+            if (score > 0) {
+                ws.send(JSON.stringify({ type: 'score', user: username, score }));
+              }
             setScore(0);
         }
 
