@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt'); // For secure password comparison
 const uuid = require('uuid');
 const app = express();
 const cookieParser = require('cookie-parser');
-
+const { peerProxy } = require('./websocket.js');
 
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.

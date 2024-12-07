@@ -15,6 +15,15 @@
     ;
 }
 
+.messages {
+    color: gray;
+    text-align: left;
+    justify-content: left;
+    margin-left: 0;
+    display: flex;    /* Use flexbox for better alignment control */
+    flex-direction: column; /* Ensure messages stack vertically */
+}
+
 
 
 .color-box {

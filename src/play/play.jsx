@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GameEvent, GameNotifier } from './gamePlayNotifier';
 import './play.css';
+import { delay } from "./delay";
 
 export function Play() {
     const [score, setScore] = useState(0);
@@ -11,8 +12,6 @@ export function Play() {
     const [messages, setMessages] = useState([]); // State to hold incoming messages
     const [canSubmit, setCanSubmit] = useState(true); // Track if the submit button should be enabled
     const currentDate = new Date().toISOString();
-
-    const wsRef = useRef(null);
 
     useEffect(() => {
         async function fetchUserData() {
@@ -31,30 +30,51 @@ export function Play() {
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
+        
         }
 
         fetchUserData();
         randomizeColors();
 
+        // Add a handler to listen for game events
+        GameNotifier.addHandler(handleGameEvent);
 
-        const ws = new WebSocket(`ws://localhost:4000/wss`);
-        wsRef.current = ws;
-
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'login') {
-                console.log(`User logged in: ${data.user}`);
-                setMessages(prevMessages => [...prevMessages, `User logged in: ${data.user}`]); // Store message
-            } else if (data.type === 'score') {
-                console.log(`Player scored: ${data.user}, Score: ${data.score}`);
-                setMessages(prevMessages => [...prevMessages, `Player scored: ${data.user}, Score: ${data.score}`]); // Store message
-            }
-        };
-        
         return () => {
-            ws.close();
+            GameNotifier.removeHandler(handleGameEvent);
         };
     }, []);
+
+    const getUsername = async () => {
+        if (!username) {
+            try {
+                const response = await fetch('/api/auth/username', {
+                    method: 'GET',
+                    credentials: 'include', // Ensure cookies are sent with the request
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setUsername(data.username || "Guest");
+                    setHighScore(data.highScore || 0);
+                } else {
+                    console.error("Failed to fetch user data:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        }
+    };
+
+    const handleGameEvent = async (event) => {
+        await getUsername();
+        if (event.type === GameEvent.System) {
+            console.log(event.value.msg);
+            setMessages(prevMessages => [...prevMessages,'user connected']);
+        } else if (event.type === GameEvent.Score) {
+            const { user, score } = event.value;
+            console.log(`${user} scored: ${score}`);
+            setMessages(prevMessages => [...prevMessages, `${user} scored: ${score}`]);
+        }
+    };
 
 
     function getRandomRGB() {
@@ -101,9 +121,8 @@ export function Play() {
             const tempScore = score;
             setScore(0);
             if (score > 0) {
-                wsRef.current.send(JSON.stringify({ type: 'score', user: username, tempScore }));
+                GameNotifier.broadcastEvent(username, GameEvent.Score, { user: username, score: tempScore });
             }
-            
         }
 
         randomizeColors();
@@ -121,7 +140,7 @@ export function Play() {
 
             {/* Display incoming messages */}
             <div className="messages">
-                {messages.map((message, index) => (
+                {messages.splice(-3).map((message, index) => (
                     <p key={index}>{message}</p>
                 ))}
             </div>
