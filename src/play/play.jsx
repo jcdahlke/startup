@@ -99,17 +99,19 @@ export function Play() {
         if (selectedColorRGB === correctColor) {
             const newScore = score + 1;
             setScore(newScore);
-            setCanSubmit(true); // Allow submission again
 
-            if (newScore > highScore) {
-                setHighScore(newScore);
+            
+        } 
+        else {
+            if (score > highScore) {
+                setHighScore(score);
                 try {
                     await fetch('/api/score', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             username,
-                            score: newScore,
+                            score: score,
                             date: currentDate,
                         }),
                     });
@@ -117,7 +119,6 @@ export function Play() {
                     console.error("Error submitting high score:", error);
                 }
             }
-        } else {
             const tempScore = score;
             setScore(0);
             if (score > 0) {
