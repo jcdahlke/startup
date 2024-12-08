@@ -77,3 +77,8 @@ For this deliverable I stored encrypted login info in database as well as scores
 * **existing user** - Returns an error if user already exists in the db.
 * **Use MongoDB to store credentials** - Stores both encrypted user info and their scores.
 * **Restricts functionality** - You can only play when logged in. An authtoken stored in the cookie is need to play.
+
+## WebSocket deliverable
+The following is an example of the required information for the `Startup WebSocket` deliverable
+
+* For this deliverable I used webSocket to communicate scores other users are getting
