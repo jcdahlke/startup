@@ -974,3 +974,82 @@ wss.on('connection', (ws) => {
 Key Concepts:
 Connection Upgrade: When the client sends an HTTP request with a connection: Upgrade header, the server upgrades the connection to WebSocket.
 Two-way Communication: After the upgrade, the server and client can exchange messages in real-time without additional requests.
+
+
+What is the default port for HTTP/HTTPS/SSH?
+
+HTTP: Port 80
+HTTPS: Port 443
+SSH: Port 22
+What does an HTTP status code in the range of 300/400/500 indicate?
+
+300: Redirection (e.g., the requested resource has moved)
+400: Client Errors (e.g., bad request, unauthorized access)
+500: Server Errors (e.g., internal server error, bad gateway)
+What does the HTTP header content-type allow you to do?
+
+The Content-Type header informs the server about the type of data being sent by the client (e.g., application/json, text/html). It allows the server to process the data correctly based on the specified format.
+What does a “Secure cookie”/”Http-only cookie”/”Same-site cookie” do?
+
+Secure cookie: Can only be sent over HTTPS connections, ensuring data is transmitted securely.
+Http-only cookie: Cannot be accessed via JavaScript (helps mitigate XSS attacks).
+Same-site cookie: Controls whether the cookie is sent along with cross-site requests, helping mitigate CSRF attacks.
+Assuming the following Express middleware, what would be the console.log output for an HTTP GET request with a URL path of /api/document?
+
+The console.log output would depend on the actual middleware code. Typically, it could log information about the request method, URL, or headers. For example, if the middleware logs the request URL, the output would be /api/document.
+Given the following Express service code: What does the following front-end JavaScript that performs a fetch return?
+
+The answer depends on the specific service code and the fetch request. Generally, the fetch function returns a promise that resolves to the response object. You can access the data using .json() or .text() methods, depending on the response format.
+Given the following MongoDB query, select all of the matching documents {name:Mark}
+
+The query will return all documents from the collection where the name field is "Mark". In MongoDB, this can be executed like so:
+js
+Copy code
+db.collection.find({ name: "Mark" });
+How should user passwords be stored?
+
+User passwords should be stored securely using hashing algorithms (e.g., bcrypt, Argon2) and never stored in plaintext. The hashed password should then be stored in the database.
+Assuming the following Node.js WebSocket code in the back end, and the following front-end WebSocket code, what will the front-end log to the console?
+
+The output on the front-end would depend on the WebSocket interaction between the client and server. For example, if the back-end sends a message like "Hello, WebSocket" and the front-end has a onmessage handler, it will log that message to the console.
+What is the WebSocket protocol intended to provide?
+
+WebSocket provides full-duplex communication, allowing both the client and server to send and receive messages independently over a single, persistent connection. It’s designed for real-time applications.
+What do the following acronyms stand for? JSX, JS, AWS, NPM, NVM
+JSX: JavaScript XML
+JS: JavaScript
+AWS: Amazon Web Services
+NPM: Node Package Manager
+NVM: Node Version Manager
+Assuming an HTML document with a body element. What text content will the following React component generate? The React component will use parameters.
+The output depends on the parameters passed to the component. For example, if the component renders a paragraph like <p>{props.text}</p>, and the text parameter is "Hello", it will generate <p>Hello</p>.
+Given a set of React components that include each other, what will be generated?
+React components can be nested to generate a tree of HTML elements. The final output depends on the JSX structure. For example, if a parent component includes a child component with specific props, the HTML generated will reflect that structure.
+What does a React component with React.useState do?
+useState is a React hook that allows a component to manage local state. It returns an array with the current state value and a function to update it.
+What are React Hooks used for?
+React Hooks are functions that allow you to "hook into" React state and lifecycle features from functional components. Common hooks include useState, useEffect, and useContext.
+What does the State Hook/Context Hook/Ref Hook/Effect Hook/Performance Hook do?
+State Hook (useState): Allows functional components to manage state.
+Context Hook (useContext): Provides a way to access context values in a component tree.
+Ref Hook (useRef): Allows you to persist values between renders or access DOM elements directly.
+Effect Hook (useEffect): Allows you to perform side effects in function components, such as fetching data or subscribing to events.
+Performance Hook (useMemo, useCallback): Helps optimize performance by memoizing values or functions.
+Given React Router code, select statements that are true.
+The truth of statements regarding React Router would depend on the code in question, but typical behavior includes defining routes with <Route />, using useNavigate() for programmatic navigation, and NavLink to handle navigation with styling.
+What does the package.json file do?
+The package.json file is used to manage project metadata, dependencies, scripts, and configurations for Node.js projects.
+What does the fetch function do?
+The fetch function is used to make HTTP requests (e.g., GET, POST) and returns a promise that resolves to the response from the request.
+What does Node.js do?
+Node.js is a runtime environment that allows you to execute JavaScript code outside of a browser. It’s often used for server-side applications.
+What does PM2 do?
+PM2 is a process manager for Node.js applications, used to manage and monitor application processes. It helps ensure that applications are always running and can restart them on failure or reboot.
+What does Vite do?
+Vite is a build tool that provides fast development environments and bundling for modern web projects, particularly those using frameworks like React or Vue. It focuses on performance and speed during development.
+
+
+
+
+
+
