@@ -479,3 +479,78 @@ function Child({ onUpdate }) {
   return <button onClick={() => onUpdate("Data")}>Click</button>;
 }
 ''' jsx
+
+
+Router
+React Router Basics
+React Router DOM: Used for routing in single-page React applications.
+BrowserRouter: Encapsulates the application and manages routing.
+NavLink: Captures user navigation events and renders the appropriate component.
+Routes: Defines the components to render for different paths.
+Key Components:
+<BrowserRouter>: Controls routing.
+<NavLink to='path'>: Used for navigation.
+<Routes>: Contains route definitions.
+<Route path='/' element={<Component />} />: Defines a route that renders a specific component.
+Wildcard Route: <Route path='*' element={<Navigate to='/' replace />} /> handles undefined routes by redirecting.
+Assignment:
+Fork and modify a CodePen by adding a /scores route component.
+Submit CodePen URL and update your GitHub notes.md with key learnings.
+
+Toolchains
+Common Web Development Tools:
+Code Repository: Stores code with version control (e.g., GitHub).
+Linter: Ensures consistent code style.
+Prettier: Formats code automatically.
+Transpiler: Converts code (e.g., JSX to JavaScript).
+Polyfill: Adds support for older browsers.
+Bundler: Packages code for deployment (e.g., Rollup).
+Minifier: Reduces file size for faster delivery.
+Testing: Automates correctness checks.
+Deployment: Automates the process of moving code from development to production.
+
+Vite Toolchain:
+Vite: Fast bundler and development server that supports JSX, TypeScript, and CSS.
+ESBuild: Underlies Vite for fast transpiling and module bundling.
+Rollup: Handles final bundling and tree shaking for optimized performance.
+
+Vite Setup
+Creating a React Project with Vite:
+Run npm create vite@latest demoVite -- --template react.
+Navigate to the project directory: cd demoVite.
+Install dependencies: npm install.
+Run the development server: npm run dev.
+
+File Structure:
+index.html: The main HTML page.
+package.json: Contains project dependencies and scripts.
+vite.config.js: Configuration file for Vite.
+main.jsx: Entry point for React, renders the App component.
+App.jsx: The main component that holds the application logic.
+
+JSX vs JS:
+Use .jsx for files containing JSX (recommended for better editor support).
+
+Building for Production:
+Run npm run build to generate a production build in the dist directory.
+The output is optimized for deployment.
+
+Internet Connections: The internet connects computers globally through networks, with each device requiring an IP address for communication. These addresses are translated into human-friendly domain names via the Domain Name System (DNS).
+
+Traceroute: You can trace the path of a connection using tools like traceroute, which shows the hops between your device and the destination, helping understand the network route and identifying failures.
+
+TCP/IP Model: The internet follows the TCP/IP model with layers that manage how data moves from the physical medium (link layer) to application services (application layer), including protocols like HTTP for the web.
+
+Web Servers: These servers host web services and handle incoming HTTP requests. They can serve static content or dynamically generate content in response to requests, as seen in the Go language examples for building web servers.
+
+Web Service Gateways: In modern architectures, a service gateway (reverse proxy) maps incoming requests to different services running on separate ports, simplifying access for users.
+
+Microservices: Web applications often use microservices, which are small, independent services that perform specific tasks, allowing scalable systems that handle large user bases.
+
+Serverless: This model removes the need to manage physical servers, where functions are executed on demand and scale automatically.
+
+Domain Names: A domain name (like byu.edu) is a human-readable label for an IP address, broken into subdomains and top-level domains (TLDs). Domain names are maintained in registries, and tools like whois provide ownership information.
+
+DNS (Domain Name System): The DNS maps domain names to IP addresses using records such as A (address) and CNAME (alias). Caching and TTL (time-to-live) settings help speed up name resolution and manage updates.
+
+Leasing Domain Names: Domain names can be leased for specific periods. Their prices vary, and it's often more cost-effective to choose unique, obscure names rather than popular ones.
