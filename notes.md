@@ -384,3 +384,98 @@ Future integration via NPM is possible with npm install bootstrap.
 ** Global Speed Tests:
 *** Use tools like Pingdom or DotCom Tools to test latency worldwide.
 *** Insights: Compression, caching, and CDN recommendations.
+
+## React
+### Components
+* React apps are built from components, which are reusable, independent pieces of UI.
+
+Function Components:
+
+'''
+function Welcome() {
+  return <h1>Welcome to React!</h1>;
+}
+''' jsx
+Class Components (legacy):
+
+'''
+class Welcome extends React.Component {
+  render() {
+    return <h1>Welcome to React!</h1>;
+  }
+}
+''' jsx
+### JSX
+* JSX combines HTML-like syntax with JavaScript.
+
+Example:
+
+'''
+const name = "Joey";
+const element = <h1>Hello, {name}!</h1>;
+''' jsx
+* Attributes use camelCase, e.g., className instead of class.
+### Props
+Props are read-only data passed from parent to child components.
+
+Passing Props:
+
+'''
+<Welcome name="Joey" />
+''' jsx
+Using Props:
+
+'''
+function Welcome(props) {
+  return <h1>Hello, {props.name}!</h1>;
+}
+''' jsx
+### State
+* State stores dynamic data in components.
+
+useState Hook:
+'''
+const [count, setCount] = React.useState(0);
+
+return (
+  <button onClick={() => setCount(count + 1)}>
+    Clicked {count} times
+  </button>
+);
+''' jsx
+### Reactivity
+* React automatically updates the UI when state or props change.
+
+Example:
+
+'''
+const [color, setColor] = React.useState("blue");
+return <p style={{ color }}>This text is {color}!</p>;
+''' jsx
+### Hooks
+* React hooks let you manage state and lifecycle in function components.
+
+* useState: Manage local state.
+* useEffect: Handle side effects like data fetching.
+'''
+React.useEffect(() => {
+  console.log("Component rendered");
+  return () => console.log("Cleanup");
+}, []);
+''' jsx
+### Data Flow
+Parent to Child:
+'''
+<Child data={parentData} />
+''' jsx
+Child to Parent:
+'''
+function Parent() {
+  const handleUpdate = (data) => console.log(data);
+  return <Child onUpdate={handleUpdate} />;
+}
+
+function Child({ onUpdate }) {
+  return <button onClick={() => onUpdate("Data")}>Click</button>;
+}
+''' jsx
